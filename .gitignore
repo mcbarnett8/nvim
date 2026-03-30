@@ -1,0 +1,8 @@
+plugged/
+plugin/
+spell/
+session/
+*.swp
+*.swo
+*~
+.DS_Store
