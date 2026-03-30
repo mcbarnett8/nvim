@@ -3,21 +3,23 @@
 This is my personal Neovim configuration designed to work on **older systems (RHEL 8)** while still being portable to **Ubuntu and macOS**.
 
 It provides a lightweight, stable setup with:
-- File explorer (NERDTree)
-- Fuzzy finder (fzf)
-- Git integration
-- Statusline (airline)
-- Basic IDE-like navigation
+
+* File explorer (NERDTree)
+* Fuzzy finder (fzf)
+* Git integration
+* Statusline (airline)
+* Basic IDE-like navigation
 
 ---
 
 ## Requirements
 
 ### RHEL 8 / Rocky / Alma
+
 ```bash
 sudo dnf install -y git curl ripgrep xclip nodejs npm python3-pip gcc
 pip3 install --user pynvim
-````
+```
 
 ---
 
@@ -44,15 +46,59 @@ pip3 install --user pynvim
 
 ## Install
 
-```bash
-mkdir -p ~/dotfiles
-git clone <YOUR_REPO_URL> ~/dotfiles/nvim
+### 1. Clone config
 
+```bash
+git clone <YOUR_REPO_URL> ~/dotfiles/nvim
+```
+
+---
+
+### 2. Clean existing config (IMPORTANT)
+
+If you already have a Neovim config, it can conflict (especially `init.lua`).
+
+```bash
+rm -rf ~/.config/nvim
+```
+
+---
+
+### 3. Link config
+
+```bash
 mkdir -p ~/.config
 ln -s ~/dotfiles/nvim ~/.config/nvim
 ```
 
-Install plugins:
+Verify:
+
+```bash
+ls ~/.config/nvim
+```
+
+You should see `init.vim`.
+
+---
+
+### 4. Install vim-plug (REQUIRED)
+
+```bash
+mkdir -p ~/.local/share/nvim/site/autoload
+
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+```
+
+Verify:
+
+```bash
+ls ~/.local/share/nvim/site/autoload/plug.vim
+```
+
+---
+
+### 5. Install plugins
 
 ```bash
 nvim
@@ -72,65 +118,52 @@ Leader key = `Space`
 
 ### File Navigation
 
-- `<Space>e` → Toggle file tree
-    
-- `<Space>o` → Find current file in tree
-    
-- `<Space>ff` → Fuzzy find files (current dir)
-    
-- `<Space>fh` → Fuzzy find in home directory
-    
-- `<Space>fc` → Fuzzy find in nvim config
-    
+* `<Space>e` → Toggle file tree
+* `<Space>o` → Find current file in tree
+* `<Space>ff` → Fuzzy find files (current dir)
+* `<Space>fh` → Fuzzy find in home directory
+* `<Space>fc` → Fuzzy find in nvim config
+
+---
 
 ### Buffers
 
-- `Shift-l` → Next buffer
-    
-- `Shift-h` → Previous buffer
-    
-- `<Space>bd` → Close buffer
-    
+* `Shift-l` → Next buffer
+* `Shift-h` → Previous buffer
+* `<Space>bd` → Close buffer
+
+---
 
 ### Window Navigation
 
-- `Ctrl-h/j/k/l` → Move between splits
-    
-- `<Space>sv` → Vertical split
-    
-- `<Space>sh` → Horizontal split
-    
+* `Ctrl-h/j/k/l` → Move between splits
+* `<Space>sv` → Vertical split
+* `<Space>sh` → Horizontal split
+
+---
 
 ### General
 
-- `<Space>w` → Save
-    
-- `<Space>q` → Quit
-    
-- `<Space>Q` → Force quit
-    
-- `<Space>h` → Clear search highlight
-    
+* `<Space>w` → Save
+* `<Space>q` → Quit
+* `<Space>Q` → Force quit
+* `<Space>h` → Clear search highlight
+
+---
 
 ### Terminal
 
-- `<Space>tt` → Open terminal
-    
-- `Esc` → Exit terminal mode
-    
+* `<Space>t` → Toggle terminal
+* `Esc` → Exit terminal mode
 
 ---
 
 ## Notes
 
-- Plugins are managed with **vim-plug**
-    
-- Plugin directory (`plugged/`) is ignored in git
-    
-- Config is written in `init.vim` (not Lua) for compatibility with older Neovim versions
-    
-- Designed to avoid dependencies on newer Neovim features
-    
+* Plugins are managed with **vim-plug**
+* Plugin directory (`plugged/`) is ignored in git
+* Config is written in `init.vim` (not Lua) for compatibility with older Neovim versions
+* Designed to avoid dependencies on newer Neovim features
 
 ---
 
@@ -146,21 +179,22 @@ Inside Neovim:
 
 ## Known Limitations
 
-- Not compatible with modern Neovim frameworks (NvChad, LazyVim)
-    
-- Node.js from some distros (RHEL) is outdated and may affect LSP features
-    
-- Minimal LSP setup by default (can be extended)
-    
+* Not compatible with modern Neovim frameworks (NvChad, LazyVim)
+* Node.js from some distros (RHEL) is outdated and may affect LSP features
+* Minimal LSP setup by default (can be extended)
 
 ---
 
 ## Future Improvements
 
-- Add CoC or LSP config
-    
-- Improve fuzzy search workflow
-    
-- Optional Telescope migration (if upgrading Neovim)
-    
+* Add CoC or LSP config
+* Improve fuzzy search workflow
+* Optional Telescope migration (if upgrading Neovim)
 
+---
+
+## What actually went wrong in your case
+
+* You had **no vim-plug installed** → caused all the `plug#begin` errors
+* You likely already had `~/.config/nvim` with an `init.lua` → Neovim was loading that first or conflicting
+* Your original instructions didn’t enforce a clean state → that’s why it behaved inconsistently
