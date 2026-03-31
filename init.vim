@@ -85,7 +85,7 @@ tnoremap <C-l> <C-\><C-n><C-w>l
 
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
-let g:NERDTreeQuitOnOpen = 0
+let g:NERDTreeQuitOnOpen = 1
 
 function! NERDTreeSmartToggle()
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
