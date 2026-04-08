@@ -1,3 +1,4 @@
+
 set nocompatible
 filetype plugin indent on
 syntax on
@@ -40,6 +41,18 @@ Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'sheerun/vim-polyglot'
 Plug 'morhetz/gruvbox'
+Plug 'neovim/nvim-lspconfig'
+
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
+
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
 
 call plug#end()
 
@@ -114,13 +127,20 @@ let g:term_buf = -1
 
 function! ToggleTerm()
   if bufexists(g:term_buf)
-    execute 'bd! ' . g:term_buf
-    let g:term_buf = -1
+    if bufwinnr(g:term_buf) != -1
+      execute bufwinnr(g:term_buf) . 'wincmd c'
+    else
+      botright split
+      resize 12
+      execute 'buffer ' . g:term_buf
+      startinsert
+    endif
   else
     botright split
     resize 12
     terminal
     let g:term_buf = bufnr('%')
+    setlocal nonumber norelativenumber signcolumn=no
     startinsert
   endif
 endfunction
@@ -128,3 +148,6 @@ endfunction
 nnoremap <leader>t :call ToggleTerm()<CR>
 tnoremap <leader>t <C-\><C-n>:call ToggleTerm()<CR>
 tnoremap <Esc> <C-\><C-n>
+
+" Load in lua config
+lua require('core')
