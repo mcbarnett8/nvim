@@ -1,3 +1,7 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+vim.opt.clipboard = "unnamedplus"
+
 -- Completion capabilities must be defined before LSP config
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
